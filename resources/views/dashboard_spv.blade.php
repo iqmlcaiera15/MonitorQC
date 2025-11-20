@@ -24,7 +24,6 @@
         </div>
     </div>
 
-
     @php
         // safe helpers
         $totalProduksi = $data->sum('Jumlah_Produksi');
@@ -62,21 +61,22 @@
         $shiftLabels = $shiftGrouped->keys();
         $shiftData = $shiftGrouped->values();
     @endphp
-    
-
-    <div class="download-box mb-4">
-        <a href="{{ route('export') }}" class="download-btn">
-            <i class="bi bi-download"></i> Download Data Excel
-        </a>
-    </div>
 
     <style>
+        /* Download Box */
         .download-box {
             background: #f8f9fa;
             padding: 15px;
             border: 1px solid #dee2e6;
             border-radius: 8px;
-            display: inline-block;
+            display: block;
+            margin-bottom: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .download-box {
+                margin: 0 0.5rem 1rem 0.5rem;
+            }
         }
 
         .download-btn {
@@ -86,14 +86,203 @@
             border-radius: 6px;
             text-decoration: none;
             font-weight: 500;
+            display: inline-block;
+            width: 100%;
+            text-align: center;
         }
 
         .download-btn:hover {
-            background-color: #015255ff;
+            background-color: #013d3f;
             text-decoration: none;
             color: white;
         }
+
+        /* Stats Grid Responsive */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 0.75rem;
+                padding: 0 0.5rem;
+            }
+            
+            .stat-card {
+                padding: 1rem;
+            }
+            
+            .stat-value {
+                font-size: 1.5rem !important;
+            }
+            
+            .stat-icon i {
+                font-size: 1.5rem !important;
+            }
+        }
+
+        /* Chart Grid Responsive */
+        .chart-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .chart-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+                padding: 0 0.5rem;
+            }
+        }
+
+        /* Chart Card */
+        .chart-card {
+            overflow: visible;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        /* Chart Canvas Height */
+        .chart-canvas {
+            position: relative;
+            height: 300px;
+            padding: 1rem;
+            overflow: visible;
+        }
+
+        @media (max-width: 768px) {
+            .chart-canvas {
+                height: 280px;
+                padding: 1rem 0.5rem;
+            }
+            
+            .chart-card {
+                margin-bottom: 1rem;
+            }
+        }
+
+        /* Table Responsive */
+        .table-card {
+            overflow-x: auto;
+            margin-bottom: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .table-card {
+                margin: 0 0.5rem 1.5rem 0.5rem;
+            }
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .modern-table {
+            width: 100%;
+            min-width: 800px;
+        }
+
+        @media (max-width: 768px) {
+            .modern-table {
+                font-size: 0.875rem;
+            }
+            
+            .modern-table th,
+            .modern-table td {
+                padding: 0.5rem;
+                white-space: nowrap;
+            }
+            
+            .badge {
+                font-size: 0.75rem;
+                padding: 0.25rem 0.5rem;
+            }
+        }
+
+        /* Page Header Responsive */
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 0 0.5rem;
+            }
+            
+            .page-header h2 {
+                font-size: 1.5rem;
+            }
+            
+            .page-header .date {
+                font-size: 0.875rem;
+            }
+        }
+
+        /* Chart Header Responsive */
+        .chart-header {
+            padding: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .chart-header {
+                padding: 0.75rem;
+            }
+            
+            .chart-title {
+                font-size: 0.95rem;
+            }
+        }
+
+        /* Top Production List */
+        .top-production-list {
+            padding: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .top-production-list {
+                padding: 0.75rem;
+            }
+            
+            .production-item {
+                padding: 0.5rem 0 !important;
+                font-size: 0.875rem;
+            }
+        }
+
+        /* Alert Responsive */
+        @media (max-width: 768px) {
+            .alert-modern {
+                padding: 0.75rem;
+                font-size: 0.875rem;
+            }
+        }
+
+        /* Utility Classes */
+        @media (max-width: 576px) {
+            .mb-4 {
+                margin-bottom: 1rem !important;
+            }
+        }
     </style>
+
+    <div class="download-box">
+        <a href="{{ route('export') }}" class="download-btn">
+            <i class="bi bi-download"></i> Download Data Excel
+        </a>
+    </div>
 
     <div class="stats-grid">
         <div class="stat-card blue">
@@ -207,9 +396,9 @@
                     Top Produksi by Line
                 </div>
             </div>
-            <div style="padding: 1rem;">
+            <div class="top-production-list">
                 @foreach($distribusiData as $i => $val)
-                <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 0; border-bottom: 1px solid #f3f4f6;">
+                <div class="production-item" style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 0; border-bottom: 1px solid #f3f4f6;">
                     <div style="display: flex; align-items: center; gap: 0.75rem;">
                         <i class="bi bi-gear-fill" style="color: #6366f1; font-size: 1.25rem;"></i>
                         <span style="font-weight: 500;">{{ $distribusiLabels[$i] }}</span>
@@ -260,7 +449,7 @@
                                 $achievement = $row->Target_Produksi > 0 ? ($row->Jumlah_Produksi / $row->Target_Produksi) * 100 : 0;
                                 $badgeClass = $achievement >= 100 ? 'badge-green' : ($achievement >= 80 ? 'badge-orange' : 'badge-red');
                             @endphp
-                            <span class="{{ $badgeClass }}">{{ number_format($achievement, 2) }}%</span>
+                            <span class="badge {{ $badgeClass }}">{{ number_format($achievement, 2) }}%</span>
                         </td>
                         <td>
                             @php
@@ -306,7 +495,7 @@
                             @php
                                 $severityBadge = $defect->Severity === 'Critical' ? 'badge-red' : ($defect->Severity === 'Major' ? 'badge-orange' : 'badge-blue');
                             @endphp
-                            <span class="{{ $severityBadge }}">{{ $defect->Severity }}</span>
+                            <span class="badge {{ $severityBadge }}">{{ $defect->Severity }}</span>
                         </td>
                     </tr>
                     @endforeach
@@ -340,6 +529,53 @@
     const trendProduksi = Object.values(produksiByDate);
     const trendDefect = trendLabels.map(l => defectByDate[l] || 0);
 
+    // Chart.js responsive config
+    const responsiveOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+        layout: {
+            padding: {
+                left: window.innerWidth > 768 ? 10 : 5,
+                right: window.innerWidth > 768 ? 10 : 5,
+                top: window.innerWidth > 768 ? 10 : 5,
+                bottom: window.innerWidth > 768 ? 10 : 5
+            }
+        },
+        plugins: {
+            legend: {
+                display: window.innerWidth > 768,
+                position: window.innerWidth > 768 ? 'top' : 'bottom',
+                labels: {
+                    boxWidth: window.innerWidth > 768 ? 40 : 20,
+                    padding: window.innerWidth > 768 ? 10 : 5,
+                    font: {
+                        size: window.innerWidth > 768 ? 12 : 10
+                    }
+                }
+            }
+        },
+        scales: {
+            x: {
+                ticks: {
+                    font: {
+                        size: window.innerWidth > 768 ? 12 : 9
+                    },
+                    maxRotation: window.innerWidth > 768 ? 45 : 90,
+                    minRotation: window.innerWidth > 768 ? 0 : 45,
+                    autoSkip: true,
+                    maxTicksLimit: window.innerWidth > 768 ? 10 : 5
+                }
+            },
+            y: {
+                ticks: {
+                    font: {
+                        size: window.innerWidth > 768 ? 12 : 9
+                    }
+                }
+            }
+        }
+    };
+
     // Produksi Chart
     new Chart(document.getElementById('produksiChart'), {
         type: 'line',
@@ -361,10 +597,7 @@
                 tension: 0.3
             }]
         },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false
-        }
+        options: responsiveOptions
     });
 
     // Distribusi by Line (doughnut)
@@ -380,7 +613,27 @@
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            cutout: '70%'
+            cutout: '65%',
+            layout: {
+                padding: {
+                    left: window.innerWidth > 768 ? 10 : 5,
+                    right: window.innerWidth > 768 ? 10 : 5,
+                    top: window.innerWidth > 768 ? 10 : 5,
+                    bottom: window.innerWidth > 768 ? 10 : 5
+                }
+            },
+            plugins: {
+                legend: {
+                    position: window.innerWidth > 768 ? 'right' : 'bottom',
+                    labels: {
+                        boxWidth: window.innerWidth > 768 ? 15 : 12,
+                        padding: window.innerWidth > 768 ? 10 : 8,
+                        font: {
+                            size: window.innerWidth > 768 ? 12 : 10
+                        }
+                    }
+                }
+            }
         }
     });
 
@@ -396,51 +649,28 @@
         },
         options: {
             responsive: true,
-            maintainAspectRatio: false
+            maintainAspectRatio: false,
+            layout: {
+                padding: {
+                    left: window.innerWidth > 768 ? 10 : 5,
+                    right: window.innerWidth > 768 ? 10 : 5,
+                    top: window.innerWidth > 768 ? 10 : 5,
+                    bottom: window.innerWidth > 768 ? 10 : 5
+                }
+            },
+            plugins: {
+                legend: {
+                    position: window.innerWidth > 768 ? 'right' : 'bottom',
+                    labels: {
+                        boxWidth: window.innerWidth > 768 ? 15 : 12,
+                        padding: window.innerWidth > 768 ? 10 : 8,
+                        font: {
+                            size: window.innerWidth > 768 ? 12 : 10
+                        }
+                    }
+                }
+            }
         }
-    });
-
-    // Top defect types (horizontal bar)
-    const defectTypes = {};
-    defectData.forEach(d => {
-        defectTypes[d.Jenis_Defect] = (defectTypes[d.Jenis_Defect] || 0) + Number(d.Jumlah_Cacat_perjenis || 0);
-    });
-    const sorted = Object.entries(defectTypes).sort((a,b)=>b[1]-a[1]).slice(0,10);
-    new Chart(document.getElementById('defectTypeChart'), {
-        type: 'bar',
-        data: {
-            labels: sorted.map(s=>s[0]),
-            datasets: [{ data: sorted.map(s=>s[1]), backgroundColor: '#ef4444' }]
-        },
-        options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false }
-    });
-
-    // Severity chart
-    const severityCounts = {};
-    defectData.forEach(d => {
-        severityCounts[d.Severity] = (severityCounts[d.Severity] || 0) + Number(d.Jumlah_Cacat_perjenis || 0);
-    });
-    new Chart(document.getElementById('severityChart'), {
-        type: 'doughnut',
-        data: {
-            labels: Object.keys(severityCounts),
-            datasets: [{ data: Object.values(severityCounts), backgroundColor: ['#ef4444','#f59e0b','#0dcaf0'] }]
-        },
-        options: { responsive: true, maintainAspectRatio: false, cutout: '70%' }
-    });
-
-    // Line chart
-    const lineData = {};
-    produksiData.forEach(d=> {
-        lineData[d.Line_Produksi] = (lineData[d.Line_Produksi]||0) + Number(d.Jumlah_Produksi);
-    });
-    new Chart(document.getElementById('lineChart'), {
-        type: 'bar',
-        data: {
-            labels: Object.keys(lineData),
-            datasets: [{ data: Object.values(lineData), backgroundColor: ['#0d6efd','#6610f2','#6f42c1','#d63384'] }]
-        },
-        options: { responsive: true, maintainAspectRatio: false }
     });
 </script>
 @endpush

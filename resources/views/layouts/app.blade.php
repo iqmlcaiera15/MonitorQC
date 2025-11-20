@@ -15,6 +15,12 @@
             --hover-shadow: 0 4px 16px rgba(99, 102, 241, 0.12);
         }
 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             display: flex;
             height: 100vh;
@@ -32,6 +38,9 @@
             display: flex;
             flex-direction: column;
             box-shadow: 4px 0 12px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+            position: relative;
+            z-index: 1000;
         }
 
         .sidebar-header {
@@ -109,6 +118,42 @@
             justify-content: space-between;
             align-items: center;
             box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+        }
+
+        /* Hamburger Menu */
+        .hamburger-menu {
+            display: none;
+            flex-direction: column;
+            gap: 4px;
+            cursor: pointer;
+            padding: 8px;
+            background: var(--bg-gray);
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .hamburger-menu:hover {
+            background: var(--light-blue);
+        }
+
+        .hamburger-menu span {
+            width: 24px;
+            height: 3px;
+            background: var(--primary-blue);
+            border-radius: 2px;
+            transition: all 0.3s;
+        }
+
+        .hamburger-menu.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .hamburger-menu.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger-menu.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -6px);
         }
 
         .search-box {
@@ -223,7 +268,7 @@
         /* Stats Cards */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            grid-template-columns: repeat(4, 1fr);
             gap: 1.5rem;
             margin-bottom: 2rem;
         }
@@ -451,6 +496,7 @@
         .modern-table {
             width: 100%;
             font-size: 0.9rem;
+            border-collapse: collapse;
         }
 
         .modern-table thead {
@@ -487,6 +533,7 @@
             border-radius: 6px;
             font-size: 0.8rem;
             font-weight: 600;
+            display: inline-block;
         }
 
         .badge-blue { background: var(--light-blue); color: var(--primary-blue); }
@@ -520,39 +567,181 @@
             font-size: 1.25rem;
         }
 
-        /* Responsive */
+        /* Overlay untuk mobile */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+        .sidebar-overlay.active {
+            display: block;
+        }
+
+        /* Responsive Design */
         @media (max-width: 1200px) {
             .chart-grid {
                 grid-template-columns: 1fr;
             }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
 
         @media (max-width: 768px) {
+            /* Sidebar menjadi offcanvas di mobile */
             .sidebar {
-                width: 70px;
+                position: fixed;
+                top: 0;
+                left: 0;
+                bottom: 0;
+                transform: translateX(-100%);
+                z-index: 1001;
             }
-            
-            .sidebar-header h4 span {
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            /* Show hamburger menu */
+            .hamburger-menu {
+                display: flex;
+            }
+
+            /* Navbar adjustments */
+            .top-navbar {
+                padding: 0.75rem 1rem;
+                gap: 0.5rem;
+            }
+
+            .search-box {
                 display: none;
             }
-            
-            .sidebar-nav a span {
+
+            /* Adjust user info */
+            .user-info {
+                gap: 0.5rem;
+                margin-left: auto;
+            }
+
+            .user-avatar span {
                 display: none;
             }
-            
+
+            .user-info form {
+                margin-left: 0 !important;
+            }
+
+            .user-info .btn {
+                padding: 0.4rem 0.6rem;
+                font-size: 0.85rem;
+            }
+
+            /* Content area */
+            .content-area {
+                padding: 1rem;
+            }
+
+            .page-header h2 {
+                font-size: 1.4rem;
+            }
+
+            /* Stats grid untuk mobile */
             .stats-grid {
                 grid-template-columns: 1fr;
+                gap: 1rem;
             }
-            
-            .search-box {
-                width: 200px;
+
+            /* Notification icon smaller */
+            .notification-icon {
+                width: 36px;
+                height: 36px;
+            }
+
+            .user-avatar .avatar-placeholder {
+                width: 36px;
+                height: 36px;
+                font-size: 0.85rem;
+            }
+
+            /* Upload form responsive */
+            .upload-form {
+                flex-direction: column;
+            }
+
+            .upload-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .top-navbar {
+                padding: 0.5rem 0.75rem;
+            }
+
+            .content-area {
+                padding: 0.75rem;
+            }
+
+            .page-header h2 {
+                font-size: 1.25rem;
+            }
+
+            .notification-icon {
+                width: 32px;
+                height: 32px;
+            }
+
+            .user-avatar .avatar-placeholder {
+                width: 32px;
+                height: 32px;
+                font-size: 0.8rem;
+            }
+
+            .user-info .btn {
+                padding: 0.35rem 0.5rem;
+                font-size: 0.8rem;
+            }
+
+            .user-info .btn i {
+                font-size: 0.9rem;
+            }
+
+            .user-info .btn span {
+                display: none;
+            }
+
+            /* Chart cards full width on very small screens */
+            .chart-grid {
+                grid-template-columns: 1fr;
+            }
+
+            /* Table responsive */
+            .modern-table {
+                font-size: 0.8rem;
+            }
+
+            .modern-table th,
+            .modern-table td {
+                padding: 0.75rem 0.5rem;
             }
         }
     </style>
     @stack('styles')
 </head>
 <body>
-    <div class="sidebar">
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <h4>
                 <span class="logo">E</span>
@@ -579,11 +768,22 @@
         </nav>
     </div>
 
+    <!-- Main Content -->
     <div class="main-content">
-
+        <!-- Top Navbar -->
         <nav class="top-navbar">
+            <!-- Hamburger Menu (Mobile Only) -->
+            <div class="hamburger-menu" id="hamburgerMenu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+
+            <!-- Search Box -->
             <div class="search-box">
             </div>
+
+            <!-- User Info -->
             <div class="user-info">
                 <div class="notification-icon">
                     <i class="bi bi-bell-fill"></i>
@@ -596,18 +796,54 @@
                 <form action="{{ route('logout') }}" method="POST" style="margin-left: 15px;">
                     @csrf
                     <button type="submit" class="btn btn-danger btn-sm">
-                        <i class="bi bi-box-arrow-right"></i> Logout
+                        <i class="bi bi-box-arrow-right"></i>
+                        <span>Logout</span>
                     </button>
                 </form>
             </div>
         </nav>
 
+        <!-- Content Area -->
         <div class="content-area">
             @yield('content')
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Mobile Menu Toggle
+        const hamburgerMenu = document.getElementById('hamburgerMenu');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+        function toggleSidebar() {
+            sidebar.classList.toggle('active');
+            sidebarOverlay.classList.toggle('active');
+            hamburgerMenu.classList.toggle('active');
+        }
+
+        hamburgerMenu.addEventListener('click', toggleSidebar);
+        sidebarOverlay.addEventListener('click', toggleSidebar);
+
+        // Close sidebar when clicking on a link (mobile)
+        const sidebarLinks = document.querySelectorAll('.sidebar-nav a');
+        sidebarLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 768) {
+                    toggleSidebar();
+                }
+            });
+        });
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 768) {
+                sidebar.classList.remove('active');
+                sidebarOverlay.classList.remove('active');
+                hamburgerMenu.classList.remove('active');
+            }
+        });
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     @stack('scripts')
 </body>

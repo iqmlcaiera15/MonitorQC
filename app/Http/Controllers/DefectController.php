@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\DataDefect;
 use App\Models\DataProduksi;
+use Illuminate\Support\Facades\DB;
 
 class DefectController extends Controller
 {
@@ -46,6 +47,10 @@ class DefectController extends Controller
             'Jumlah_Cacat_perjenis' => $request->Jumlah_Cacat_perjenis,
             'Severity' => $request->Severity,
         ]);
+
+        DB::table('data_produksi')
+        ->where('id', $request->data_produksi_id)
+        ->increment('Jumlah_Produksi_Cacat', $request->Jumlah_Cacat_perjenis);
 
 
         return redirect()->route('datainput')->with('success', '✅ Data defect berhasil disimpan!');
